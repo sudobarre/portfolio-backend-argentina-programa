@@ -9,16 +9,14 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.Nullable;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
