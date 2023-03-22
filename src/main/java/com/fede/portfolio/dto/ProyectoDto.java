@@ -1,12 +1,18 @@
 package com.fede.portfolio.dto;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Null;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.validation.constraints.NotBlank;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class ProyectoDto {
+    @Nullable
+    private Long id;
     @NotBlank
     private String nombreP;
     @NotBlank

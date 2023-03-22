@@ -1,10 +1,7 @@
 
 package com.fede.portfolio.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +17,25 @@ public class Experiencia {
     private Long id;
     private String nombreE;
     private String descripcionE;
-    private String desdehastaE;
+    private String desdeE;
+    private String hastaE;
 
-    public Experiencia(String nombreE, String descripcionE, String desdehastaE) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Experiencia(String nombreE, String descripcionE, String desdeE, String hastaE) {
         this.nombreE = nombreE;
         this.descripcionE = descripcionE;
-        this.desdehastaE = desdehastaE;
+        this.desdeE = desdeE;
+        this.hastaE = hastaE;
+    }
+
+    public Experiencia(String nombreE, String descripcionE, String desdeE, String hastaE, User user) {
+        this.nombreE = nombreE;
+        this.descripcionE = descripcionE;
+        this.desdeE = desdeE;
+        this.hastaE = hastaE;
+        this.user = user;
     }
 }

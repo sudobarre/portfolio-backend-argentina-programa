@@ -7,6 +7,7 @@ package com.fede.portfolio.controller;
 
 import com.fede.portfolio.dto.ExperienciaDto;
 import com.fede.portfolio.dto.response.MessageResponse;
+import com.fede.portfolio.mapper.ExperienciaMapper;
 import com.fede.portfolio.model.Experiencia;
 import com.fede.portfolio.service.SExperiencia;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,30 +19,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/v1/experiencia")
+@RequestMapping("/api/v1/experience")
 public class CExperiencia {
     
     @Autowired
     SExperiencia sExperiencia;
+
+    @Autowired
+    ExperienciaMapper experienciaMapper;
     
     @GetMapping("/all")
-    public ResponseEntity<List<ExperienciaDto>> list(){
-        List<ExperienciaDto> list = sExperiencia.list();
+    public ResponseEntity<List<ExperienciaDto>> getAll(){
+        List<ExperienciaDto> list = sExperiencia.getAll();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable("id") Long id){
         if(!sExperiencia.existsById(id)) return new ResponseEntity<>(new MessageResponse("no existe"), HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(sExperiencia.getOne(id), HttpStatus.OK);
+        return new ResponseEntity<>(experienciaMapper.mapToDto(sExperiencia.getOne(id)), HttpStatus.OK);
     }
     
     @PreAuthorize("hasRole('USER','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         if (!sExperiencia.existsById(id)) {
-            return new ResponseEntity<>(new MessageResponse("no existe"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new MessageResponse("no existe id:" + id), HttpStatus.NOT_FOUND);
         }
         sExperiencia.delete(id);
         return new ResponseEntity<>(new MessageResponse("Experiencia eliminada"), HttpStatus.OK);
@@ -53,41 +56,39 @@ public class CExperiencia {
         if((dtoexp.getNombreE()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        //if(sExperiencia.existsByNombreE(dtoexp.getNombreE())){
-        //    return new ResponseEntity(new MessageResponse("Esa experiencia ya existe"), HttpStatus.BAD_REQUEST);
-        //}
-        if((dtoexp.getDesdehastaE()).isEmpty()){
+
+        if((dtoexp.getDesdeE()).isEmpty() || dtoexp.getHastaE().isEmpty()){
             return new ResponseEntity<>(new MessageResponse("La fecha es obligatoria"), HttpStatus.BAD_REQUEST);
         }
-        Experiencia experiencia = new Experiencia(dtoexp.getNombreE(),dtoexp.getDescripcionE(), dtoexp.getDesdehastaE());
-        sExperiencia.save(experiencia);
+        sExperiencia.save(dtoexp);
         
         return new ResponseEntity<>(new MessageResponse("Experiencia agregada"), HttpStatus.OK);
     }
     
     @PreAuthorize("hasRole('USER','ADMIN')")
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<?> update(
-            @PathVariable("id") Long id,
             @RequestBody ExperienciaDto dtoexp
     ){
+        Long id = dtoexp.getId();
         //Validamos si existe el ID
         if(!sExperiencia.existsById(id)){
-            return new ResponseEntity<>(new MessageResponse("El ID no existe"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new MessageResponse("El ID no existe: " + id), HttpStatus.BAD_REQUEST);
         }
         if((dtoexp.getNombreE()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if((dtoexp.getDesdehastaE()).isEmpty()){
+        if((dtoexp.getDesdeE()).isEmpty() || dtoexp.getHastaE().isEmpty()){
             return new ResponseEntity<>(new MessageResponse("La fecha es obligatoria"), HttpStatus.BAD_REQUEST);
         }
 
         Experiencia experiencia = sExperiencia.getOne(id);
         experiencia.setNombreE(dtoexp.getNombreE());
         experiencia.setDescripcionE(dtoexp.getDescripcionE());
-        experiencia.setDesdehastaE(dtoexp.getDesdehastaE());
+        experiencia.setDesdeE(dtoexp.getDesdeE());
+        experiencia.setHastaE(dtoexp.getHastaE());
 
-        sExperiencia.save(experiencia);
+        sExperiencia.update(experiencia);
         return new ResponseEntity<>(new MessageResponse("Experiencia actualizada"), HttpStatus.OK);
     } 
 }

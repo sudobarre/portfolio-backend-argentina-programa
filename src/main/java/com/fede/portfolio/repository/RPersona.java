@@ -5,14 +5,14 @@
 package com.fede.portfolio.repository;
 
 
-import com.fede.portfolio.model.Persona;
+import com.fede.portfolio.model.Info;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface RPersona extends JpaRepository<Persona,Long> {
-    public Optional<Persona> findByNombre(String nombre);
+public interface RPersona extends JpaRepository<Info,Long> {
+    public Optional<Info> findByNombre(String nombre);
     public boolean existsByNombre(String nombre);
 }

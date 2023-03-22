@@ -2,7 +2,7 @@
 package com.fede.portfolio.service;
 
 
-import com.fede.portfolio.model.Persona;
+import com.fede.portfolio.model.Info;
 import com.fede.portfolio.repository.RPersona;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,24 +15,24 @@ public class SPersona {
     @Autowired
     RPersona ipersonaRepository;
 
-    public List<Persona> getAll(){
+    public List<Info> getAll(){
          return ipersonaRepository.findAll();
      }
      
-     public Persona getOne(Long id){
+     public Info getOne(Long id){
 
         return ipersonaRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("No such Persona with id " + id));
      }
      
-     public Persona getByNombre(String nombre){
+     public Info getByNombre(String nombre){
 
         return ipersonaRepository.findByNombre(nombre)
                 .orElseThrow(() -> new IllegalStateException("No such Persona with name: " + nombre));
      }
      
-     public void save(Persona persona){
-         ipersonaRepository.save(persona);
+     public void save(Info info){
+         ipersonaRepository.save(info);
      }
      
      public void delete(Long id){

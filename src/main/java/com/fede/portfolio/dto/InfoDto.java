@@ -1,5 +1,6 @@
 package com.fede.portfolio.dto;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +11,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonaDto {
+public class InfoDto {
+
+    @Nullable
+    private Long id;
     @NotBlank
     private String nombre;
     @NotBlank

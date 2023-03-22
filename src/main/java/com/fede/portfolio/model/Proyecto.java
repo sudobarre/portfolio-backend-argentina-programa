@@ -4,10 +4,7 @@
  */
 package com.fede.portfolio.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +18,11 @@ public class Proyecto {
     private String nombreP;
     private String descripcionP;
     private String linkP;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
 
 
     public Proyecto(String nombreP, String descripcionP, String linkP) {

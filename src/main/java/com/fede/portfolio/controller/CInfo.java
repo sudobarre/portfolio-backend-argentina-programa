@@ -1,10 +1,10 @@
 
 package com.fede.portfolio.controller;
 
-import com.fede.portfolio.dto.PersonaDto;
+import com.fede.portfolio.dto.InfoDto;
 import com.fede.portfolio.dto.response.MessageResponse;
-import com.fede.portfolio.mapper.PersonaMapper;
-import com.fede.portfolio.model.Persona;
+import com.fede.portfolio.mapper.InfoMapper;
+import com.fede.portfolio.model.Info;
 import com.fede.portfolio.service.SPersona;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,21 +16,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/v1/personas")
-public class CPersona {
+@RequestMapping("/api/v1/info")
+public class CInfo {
     @Autowired
     SPersona sPersona;
 
     @Autowired
-    PersonaMapper personaMapper;
+    InfoMapper infoMapper;
     
     @GetMapping("/all")
-    public ResponseEntity<List<PersonaDto>> getAll(){
-        List<Persona> list = sPersona.getAll();
+    public ResponseEntity<List<InfoDto>> getAll(){
+        List<Info> list = sPersona.getAll();
         return new ResponseEntity<>(
                 list.stream()
-                        .map(personaMapper::toDto)
+                        .map(infoMapper::toDto)
                         .collect(Collectors.toList()),
                 HttpStatus.OK);
     }
@@ -40,9 +39,9 @@ public class CPersona {
         if(!sPersona.existsById(id)) {
             return new ResponseEntity<>(new MessageResponse("Persona no existe"), HttpStatus.NOT_FOUND);
         }
-        Persona persona = sPersona.getOne(id);
-        PersonaDto personaDto = personaMapper.toDto(persona);
-        return new ResponseEntity<>(personaDto, HttpStatus.OK);
+        Info info = sPersona.getOne(id);
+        InfoDto infoDto = infoMapper.toDto(info);
+        return new ResponseEntity<>(infoDto, HttpStatus.OK);
     }
     
     @PreAuthorize("hasRole('ADMIN')")
@@ -57,45 +56,46 @@ public class CPersona {
 
     @PreAuthorize("hasRole('USER', ADMIN')")
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody PersonaDto personaDto){
-        if((personaDto.getNombre()).isEmpty()){
+    public ResponseEntity<?> create(@RequestBody InfoDto infoDto){
+        if((infoDto.getNombre()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
 
-        sPersona.save(personaMapper.toPersona(personaDto));
+        sPersona.save(infoMapper.toInfo(infoDto));
         return new ResponseEntity<>(new MessageResponse("Persona agregada"), HttpStatus.OK);
     }
     
     @PreAuthorize("hasRole('USER', 'ADMIN')")
-    @PutMapping("/{id}")
+    @PutMapping
     //Los campos no pueden estar vacios de todas maneras por los @NotNull del dto
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody PersonaDto personaDto){
+    public ResponseEntity<?> update(@RequestBody InfoDto infoDto){
+        Long id = infoDto.getId();
         //Validamos si existe el ID
         if(!sPersona.existsById(id)){
             return new ResponseEntity<>(new MessageResponse("El ID no existe"), HttpStatus.BAD_REQUEST);
         }
 
-        if((personaDto.getNombre()).isEmpty()){
+        if((infoDto.getNombre()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if((personaDto.getApellido()).isEmpty()){
+        if((infoDto.getApellido()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("El apellido es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if((personaDto.getImg()).isEmpty()){
+        if((infoDto.getImg()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("La imagen es obligatoria"), HttpStatus.BAD_REQUEST);
         }
-        if((personaDto.getDescripcion()).isEmpty()) {
+        if((infoDto.getDescripcion()).isEmpty()) {
             return new ResponseEntity<>(new MessageResponse("La descripcion es obligatoria"), HttpStatus.BAD_REQUEST);
         }
         
-        Persona persona = sPersona.getOne(id);
+        Info info = sPersona.getOne(id);
         
-        persona.setNombre(personaDto.getNombre());
-        persona.setDescripcion(personaDto.getDescripcion());
-        persona.setImg(personaDto.getImg());
+        info.setNombre(infoDto.getNombre());
+        info.setDescripcion(infoDto.getDescripcion());
+        info.setImg(infoDto.getImg());
         
         
-        sPersona.save(persona);
+        sPersona.save(info);
         return new ResponseEntity<>(new MessageResponse("Persona actualizada"), HttpStatus.OK);
     } 
 }

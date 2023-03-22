@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/v1/skills")
+@RequestMapping("/api/v1/skill")
 public class CHys {
 
     @Autowired
@@ -55,7 +54,7 @@ public class CHys {
         return new ResponseEntity<>(new MessageResponse("Skill eliminada"), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER','ADMIN')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody HySDto dtohys) {
         if ((dtohys.getNombre()).isEmpty()) {
@@ -73,11 +72,11 @@ public class CHys {
     }
     
     @PreAuthorize("hasRole('USER', 'ADMIN')")
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<?> update(
-            @PathVariable("id") Long id,
             @RequestBody HySDto dtohys
     ) {
+        Long id = dtohys.getId();
         //Validamos si existe el ID
         if (!shys.existsById(id)) {
             return new ResponseEntity<>(new MessageResponse("El ID no existe"), HttpStatus.BAD_REQUEST);

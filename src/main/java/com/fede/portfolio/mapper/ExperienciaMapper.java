@@ -8,20 +8,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ExperienciaMapper {
-    public Experiencia mapToExperiencia(ExperienciaDto ExperienciaDto) {
-        return new Experiencia(
-                ExperienciaDto.getNombreE(),
-                ExperienciaDto.getDescripcionE(),
-                ExperienciaDto.getDesdehastaE()
-        );
-    }
 
-
-    public ExperienciaDto mapToExperienciaDto(Experiencia experiencia) {
+    public ExperienciaDto mapToDto(Experiencia experiencia) {
         return new ExperienciaDto(
+                experiencia.getId(),
                 experiencia.getNombreE(),
                 experiencia.getDescripcionE(),
-                experiencia.getDesdehastaE()
+                experiencia.getDesdeE(),
+                experiencia.getHastaE()
         );
     }
 }

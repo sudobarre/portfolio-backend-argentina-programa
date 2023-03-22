@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/v1/educacion")
+@RequestMapping("/api/v1/education")
 public class CEducacion {
     
     @Autowired
@@ -65,22 +64,21 @@ public class CEducacion {
         if((dtoeduc.getNombreE()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if((dtoeduc.getDesdehastaE()).isEmpty()){
+        if((dtoeduc.getDesdeE()).isEmpty() || dtoeduc.getHastaE().isEmpty()){
             return new ResponseEntity<>(new MessageResponse("La fecha es obligatoria"), HttpStatus.BAD_REQUEST);
         }
 
-        Educacion educacion = new Educacion(dtoeduc.getNombreE(), dtoeduc.getDescripcionE(),dtoeduc.getDesdehastaE());
-        sEducacion.save(educacion);
+        sEducacion.save(dtoeduc);
         return new ResponseEntity<>(new MessageResponse("Educacion creada"), HttpStatus.CREATED);
           
     }
     
     @PreAuthorize("hasRole('USER','ADMIN')")
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<?> update(
-            @PathVariable("id") Long id,
             @RequestBody EducacionDto dtoeduc
     ){
+        Long id = dtoeduc.getId();
         if(!sEducacion.existsById(id)){
             return new ResponseEntity<>(new MessageResponse("No existe el ID"), HttpStatus.NOT_FOUND);
         }
@@ -88,17 +86,18 @@ public class CEducacion {
         if((dtoeduc.getNombreE()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if((dtoeduc.getDesdehastaE()).isEmpty()){
+        if((dtoeduc.getDesdeE()).isEmpty() || dtoeduc.getHastaE().isEmpty()){
             return new ResponseEntity<>(new MessageResponse("La fecha es obligatoria"), HttpStatus.BAD_REQUEST);
         }
-        
+
         Educacion educacion = sEducacion.getOne(id);
 
         educacion.setNombreE(dtoeduc.getNombreE());
         educacion.setDescripcionE(dtoeduc.getDescripcionE());
-        educacion.setDesdehastaE(dtoeduc.getDesdehastaE());
-        
-        sEducacion.save(educacion);
+        educacion.setDesdeE(dtoeduc.getDesdeE());
+        educacion.setHastaE(dtoeduc.getHastaE());
+
+        sEducacion.update(educacion);
         
         return new ResponseEntity<>(new MessageResponse("Educacion actualizada"), HttpStatus.OK);
     }

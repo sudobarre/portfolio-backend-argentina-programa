@@ -5,10 +5,7 @@
 package com.fede.portfolio.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +19,10 @@ public class HyS {
     private String nombre;
     private int porcentaje;
     private String subtitle;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
     public HyS(String nombre, int porcentaje, String subtitle) {

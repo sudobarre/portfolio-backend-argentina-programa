@@ -5,6 +5,7 @@ package com.fede.portfolio.service;
 import com.fede.portfolio.dto.ExperienciaDto;
 import com.fede.portfolio.mapper.ExperienciaMapper;
 import com.fede.portfolio.model.Experiencia;
+import com.fede.portfolio.model.User;
 import com.fede.portfolio.repository.RExperiencia;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,15 @@ public class SExperiencia {
 
      @Autowired
     ExperienciaMapper experienciaMapper;
+
+     @Autowired
+     AuthService authService;
      
-     public List<ExperienciaDto> list(){
-         return rExperiencia.findAll()
+     public List<ExperienciaDto> getAll(){
+         User user = authService.getCurrentUser();
+         return rExperiencia.findAllByUser(user)
                  .stream()
-                 .map(experiencia -> experienciaMapper.mapToExperienciaDto(experiencia))
+                 .map(experiencia -> experienciaMapper.mapToDto(experiencia))
                  .collect(Collectors.toList());
      }
      
@@ -40,8 +45,10 @@ public class SExperiencia {
                  .orElseThrow(() -> new IllegalArgumentException("No such experience with name " + nombreE));
      }
      
-     public void save(Experiencia expe){
-         rExperiencia.save(expe);
+     public void save(ExperienciaDto dtoexp){
+         User user = authService.getCurrentUser();
+         Experiencia experiencia = new Experiencia(dtoexp.getNombreE(), dtoexp.getDescripcionE(), dtoexp.getDesdeE(), dtoexp.getHastaE(), user);
+         rExperiencia.save(experiencia);
      }
      
      public void delete(Long id){
@@ -55,4 +62,10 @@ public class SExperiencia {
      public boolean existsByNombreE(String nombreE){
          return rExperiencia.existsByNombreE(nombreE);
      }
+
+    public void update(Experiencia experiencia) {
+        User user = authService.getCurrentUser();
+        experiencia.setUser(user);
+        rExperiencia.save(experiencia);
+    }
 }

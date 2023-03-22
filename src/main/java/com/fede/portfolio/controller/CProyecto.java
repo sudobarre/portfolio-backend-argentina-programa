@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "*")
-@RequestMapping("/api/v1/proyecto")
+@RequestMapping("/api/v1/project")
 public class CProyecto {
     
     @Autowired
@@ -72,9 +71,10 @@ public class CProyecto {
     }
     
     @PreAuthorize("hasRole('USER','ADMIN')")
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody ProyectoDto dtoproy){
+    @PutMapping
+    public ResponseEntity<?> update(@RequestBody ProyectoDto dtoproy){
         //Validamos si existe el ID
+        Long id = dtoproy.getId();
         if(!sProyecto.existsById(id)){
             return new ResponseEntity<>(new MessageResponse("El ID no existe"), HttpStatus.BAD_REQUEST);
         }

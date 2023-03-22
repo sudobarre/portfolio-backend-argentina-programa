@@ -1,18 +1,17 @@
 
 package com.fede.portfolio.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Persona {
+@AllArgsConstructor
+public class Info {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,11 +28,9 @@ public class Persona {
     @NotNull
     private String descripcion;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Persona(String nombre, String descripcion, String apellido, String img) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.apellido = apellido;
-        this.img = img;
-    }
+
 }

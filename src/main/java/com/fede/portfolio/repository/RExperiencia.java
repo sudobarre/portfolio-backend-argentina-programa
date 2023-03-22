@@ -6,13 +6,18 @@ package com.fede.portfolio.repository;
 
 
 import com.fede.portfolio.model.Experiencia;
+import com.fede.portfolio.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface RExperiencia extends JpaRepository<Experiencia, Long> {
     public Optional<Experiencia> findByNombreE(String nombreE);
     public boolean existsByNombreE(String nombreE);
+
+    List<Experiencia> findAllByUser(User user);
 }

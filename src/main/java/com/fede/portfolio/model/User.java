@@ -43,22 +43,34 @@ public class User {
 
     private boolean enabled;
 
+    private String imgUrl;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-
-    private String imgUrl;
-
+//TODO: not implemented feature yet
     @JoinTable(name = "USER_FRIENDS", joinColumns = {
             @JoinColumn(name = "ADDING_USER", referencedColumnName = "userId", nullable =   false)}, inverseJoinColumns = {
             @JoinColumn(name = "ADDED_USER", referencedColumnName = "userId", nullable = false)})
     @ManyToMany(fetch=LAZY)
     private Collection<User> friends;
 
-    @ManyToMany(fetch=LAZY, mappedBy = "friends")
-    private Collection<User> addUser;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Educacion> educacionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Experiencia> experienciaList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HyS> hySList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Info> infoList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Proyecto> proyectoList = new ArrayList<>();
 
 }
