@@ -20,14 +20,24 @@ public class HyS {
     private int porcentaje;
     private String subtitle;
 
+    private String imgUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-
-    public HyS(String nombre, int porcentaje, String subtitle) {
+    public HyS(String nombre, int porcentaje, String subtitle, User user) {
         this.nombre = nombre;
         this.porcentaje = porcentaje;
         this.subtitle = subtitle;
+        this.user = user;
+    }
+
+    public HyS(String nombre, int porcentaje, String subtitle, String imgUrl, User user) {
+        this.nombre = nombre;
+        this.porcentaje = porcentaje;
+        this.subtitle = subtitle;
+        this.imgUrl = imgUrl;
+        this.user = user;
     }
 }

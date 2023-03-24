@@ -5,7 +5,8 @@ import com.fede.portfolio.dto.InfoDto;
 import com.fede.portfolio.dto.response.MessageResponse;
 import com.fede.portfolio.mapper.InfoMapper;
 import com.fede.portfolio.model.Info;
-import com.fede.portfolio.service.SPersona;
+import com.fede.portfolio.repository.UserRepository;
+import com.fede.portfolio.service.SInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,83 +20,59 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/info")
 public class CInfo {
     @Autowired
-    SPersona sPersona;
+    SInfo sInfo;
 
     @Autowired
     InfoMapper infoMapper;
-    
-    @GetMapping("/all")
-    public ResponseEntity<List<InfoDto>> getAll(){
-        List<Info> list = sPersona.getAll();
-        return new ResponseEntity<>(
-                list.stream()
-                        .map(infoMapper::toDto)
-                        .collect(Collectors.toList()),
-                HttpStatus.OK);
-    }
 
-    @GetMapping("/{id}")
-        public ResponseEntity<?> getById(@PathVariable("id") Long id){
-        if(!sPersona.existsById(id)) {
-            return new ResponseEntity<>(new MessageResponse("Persona no existe"), HttpStatus.NOT_FOUND);
+
+    @GetMapping("/{name}")
+        public ResponseEntity<?> getByUsername(@PathVariable("name") String name){
+        if(!sInfo.existsByUsername(name)) {
+            return new ResponseEntity<>(new MessageResponse("Usuario no existe"), HttpStatus.NOT_FOUND);
         }
-        Info info = sPersona.getOne(id);
+        Info info = sInfo.getByUsername(name);
         InfoDto infoDto = infoMapper.toDto(info);
+        infoDto.setUsername(name);
         return new ResponseEntity<>(infoDto, HttpStatus.OK);
     }
     
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        if (!sPersona.existsById(id)) {
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    @DeleteMapping("/{username}")
+    public ResponseEntity<?> delete(@PathVariable("username") String username) {
+        if (!sInfo.existsByUsername(username)) {
             return new ResponseEntity<>(new MessageResponse("no existe"), HttpStatus.NOT_FOUND);
         }
-        sPersona.delete(id);
+        sInfo.delete(username);
         return new ResponseEntity<>(new MessageResponse("Persona eliminada"), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER', ADMIN')")
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody InfoDto infoDto){
+    public ResponseEntity<?> create(@RequestBody InfoDto infoDto) throws Exception {
         if((infoDto.getNombre()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
 
-        sPersona.save(infoMapper.toInfo(infoDto));
+        sInfo.save(infoMapper.toInfo(infoDto));
         return new ResponseEntity<>(new MessageResponse("Persona agregada"), HttpStatus.OK);
     }
     
-    @PreAuthorize("hasRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping
     //Los campos no pueden estar vacios de todas maneras por los @NotNull del dto
     public ResponseEntity<?> update(@RequestBody InfoDto infoDto){
-        Long id = infoDto.getId();
-        //Validamos si existe el ID
-        if(!sPersona.existsById(id)){
-            return new ResponseEntity<>(new MessageResponse("El ID no existe"), HttpStatus.BAD_REQUEST);
-        }
-
         if((infoDto.getNombre()).isEmpty()){
             return new ResponseEntity<>(new MessageResponse("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
-        if((infoDto.getApellido()).isEmpty()){
-            return new ResponseEntity<>(new MessageResponse("El apellido es obligatorio"), HttpStatus.BAD_REQUEST);
-        }
-        if((infoDto.getImg()).isEmpty()){
-            return new ResponseEntity<>(new MessageResponse("La imagen es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
-        if((infoDto.getDescripcion()).isEmpty()) {
-            return new ResponseEntity<>(new MessageResponse("La descripcion es obligatoria"), HttpStatus.BAD_REQUEST);
-        }
         
-        Info info = sPersona.getOne(id);
+        Info info = sInfo.getByUsername(infoDto.getUsername());
         
         info.setNombre(infoDto.getNombre());
         info.setDescripcion(infoDto.getDescripcion());
         info.setImg(infoDto.getImg());
         
         
-        sPersona.save(info);
+        sInfo.update(info);
         return new ResponseEntity<>(new MessageResponse("Persona actualizada"), HttpStatus.OK);
     } 
 }

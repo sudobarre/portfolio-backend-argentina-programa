@@ -44,7 +44,7 @@ public class CHys {
         return new ResponseEntity<>(hYs, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         if (!shys.existsById(id)) {
@@ -54,24 +54,19 @@ public class CHys {
         return new ResponseEntity<>(new MessageResponse("Skill eliminada"), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody HySDto dtohys) {
         if ((dtohys.getNombre()).isEmpty()) {
             return new ResponseEntity<>(new MessageResponse("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
         }
 
-        if ((dtohys.getSubtitle()).isEmpty()) {
-            return new ResponseEntity<>(new MessageResponse("El subtitulo es obligatorio"), HttpStatus.BAD_REQUEST);
-        }
+        shys.save(dtohys);
 
-        HyS hYs = new HyS(dtohys.getNombre(), dtohys.getPorcentaje(), dtohys.getSubtitle());
-        shys.save(hYs);
-
-        return new ResponseEntity<>(new MessageResponse("Skill agregada"), HttpStatus.CREATED);
+        return new ResponseEntity<>(dtohys, HttpStatus.CREATED);
     }
     
-    @PreAuthorize("hasRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping
     public ResponseEntity<?> update(
             @RequestBody HySDto dtohys
@@ -82,16 +77,13 @@ public class CHys {
             return new ResponseEntity<>(new MessageResponse("El ID no existe"), HttpStatus.BAD_REQUEST);
         }
 
-        if ((dtohys.getSubtitle()).isEmpty()) {
-            return new ResponseEntity<>(new MessageResponse("El subtitulo es obligatorio"), HttpStatus.BAD_REQUEST);
-        }
-
         HyS hYs = shys.getOne(id);
         hYs.setNombre(dtohys.getNombre());
         hYs.setPorcentaje(dtohys.getPorcentaje());
         hYs.setSubtitle(dtohys.getSubtitle());
+        hYs.setImgUrl(dtohys.getImgUrl());
 
-        shys.save(hYs);
-        return new ResponseEntity<>(new MessageResponse("Skill actualizada"), HttpStatus.OK);
+        shys.update(hYs);
+        return new ResponseEntity<>( hySMapper.mapToDto(hYs) , HttpStatus.OK);
     }
 }

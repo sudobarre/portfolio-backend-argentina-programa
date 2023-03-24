@@ -6,11 +6,15 @@ package com.fede.portfolio.repository;
 
 
 import com.fede.portfolio.model.HyS;
+import com.fede.portfolio.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface Rhys extends JpaRepository<HyS, Long> {
     Optional<HyS> findByNombre(String nombre);
     public boolean existsByNombre(String nombre);
+
+    List<HyS> findAllByUser(User user);
 }

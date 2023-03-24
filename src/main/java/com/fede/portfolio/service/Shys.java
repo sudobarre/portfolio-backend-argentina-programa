@@ -5,7 +5,9 @@
 package com.fede.portfolio.service;
 
 
+import com.fede.portfolio.dto.HySDto;
 import com.fede.portfolio.model.HyS;
+import com.fede.portfolio.model.User;
 import com.fede.portfolio.repository.Rhys;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,13 @@ import java.util.List;
 public class Shys {
     @Autowired
     Rhys rhys;
+
+    @Autowired
+    AuthService authService;
     
     public List<HyS> getAll(){
-        return rhys.findAll();
+        User user = authService.getCurrentUser();
+        return rhys.findAllByUser(user);
     }
     
     public HyS getOne(Long id){
@@ -34,8 +40,15 @@ public class Shys {
 
     }
     
-    public void save(HyS skill){
-        rhys.save(skill);
+    public void save(HySDto dtohys){
+        User user = authService.getCurrentUser();
+        HyS hYs = new HyS(
+                dtohys.getNombre(),
+                dtohys.getPorcentaje(),
+                dtohys.getSubtitle(),
+                dtohys.getImgUrl(),
+                user);
+        rhys.save(hYs);
     }
     
     public void delete(Long id){
@@ -48,5 +61,9 @@ public class Shys {
     
     public boolean existsByNombre(String nombre){
         return rhys.existsByNombre(nombre);
+    }
+
+    public void update(HyS hYs) {
+        rhys.save(hYs);
     }
 }

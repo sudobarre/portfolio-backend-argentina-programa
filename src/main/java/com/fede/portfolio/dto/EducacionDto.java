@@ -20,13 +20,10 @@ public class EducacionDto {
     @NotBlank
     private String hastaE;
 
+    @Nullable
+    private String imgUrl;
+
     public EducacionDto() {
     }
 
-    public EducacionDto(String nombreE, String descripcionE, String desdeE, String hastaE) {
-        this.nombreE = nombreE;
-        this.descripcionE = descripcionE;
-        this.desdeE = desdeE;
-        this.hastaE = hastaE;
-    }
 }

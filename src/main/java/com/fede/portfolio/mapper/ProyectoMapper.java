@@ -8,17 +8,12 @@ import org.springframework.stereotype.Component;
 public class ProyectoMapper {
     public ProyectoDto toDto(Proyecto proyecto) {
         ProyectoDto proyectoDto = new ProyectoDto();
+        proyectoDto.setImgUrl(proyecto.getImgUrl());
+        proyectoDto.setId(proyecto.getId());
         proyectoDto.setNombreP(proyecto.getNombreP());
         proyectoDto.setDescripcionP(proyecto.getDescripcionP());
         proyectoDto.setLinkP(proyecto.getLinkP());
         return proyectoDto;
     }
 
-    public Proyecto toProyecto(ProyectoDto dtoproy) {
-        Proyecto proyecto = new Proyecto();
-        proyecto.setNombreP(dtoproy.getNombreP());
-        proyecto.setDescripcionP(dtoproy.getDescripcionP());
-        proyecto.setLinkP(dtoproy.getLinkP());
-        return proyecto;
-    }
 }

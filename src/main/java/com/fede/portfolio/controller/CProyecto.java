@@ -43,7 +43,7 @@ public class CProyecto {
         return new ResponseEntity<>(proyectoMapper.toDto(proyecto), HttpStatus.OK);
     }
     
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         if (!sProyecto.existsById(id)) {
@@ -53,7 +53,7 @@ public class CProyecto {
         return new ResponseEntity<>(new MessageResponse("Proyecto eliminado"), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ProyectoDto dtoproy){
         if((dtoproy.getNombreP()).isEmpty()){
@@ -64,13 +64,19 @@ public class CProyecto {
             return new ResponseEntity<>(new MessageResponse("El link es obligatorio"), HttpStatus.BAD_REQUEST);
         }
         
-        Proyecto proyecto = new Proyecto (dtoproy.getNombreP(), dtoproy.getDescripcionP(), dtoproy.getLinkP());        
+        Proyecto proyecto = new Proyecto (
+                dtoproy.getId(),
+                dtoproy.getNombreP(),
+                dtoproy.getDescripcionP(),
+                dtoproy.getLinkP(),
+                dtoproy.getImgUrl()
+        );
         sProyecto.save(proyecto);
         
         return new ResponseEntity<>(new MessageResponse("Proyecto agregado"), HttpStatus.OK);
     }
     
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping
     public ResponseEntity<?> update(@RequestBody ProyectoDto dtoproy){
         //Validamos si existe el ID
@@ -91,8 +97,9 @@ public class CProyecto {
         proyecto.setNombreP(dtoproy.getNombreP());
         proyecto.setDescripcionP(dtoproy.getDescripcionP());
         proyecto.setLinkP(dtoproy.getLinkP());
+        proyecto.setImgUrl(dtoproy.getImgUrl());
 
-        sProyecto.save(proyecto);
+        sProyecto.update(proyecto);
         return new ResponseEntity<>(new MessageResponse("Proyecto actualizado"), HttpStatus.OK);
     } 
 }

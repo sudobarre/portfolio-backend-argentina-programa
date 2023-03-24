@@ -15,7 +15,8 @@ public class ExperienciaMapper {
                 experiencia.getNombreE(),
                 experiencia.getDescripcionE(),
                 experiencia.getDesdeE(),
-                experiencia.getHastaE()
+                experiencia.getHastaE(),
+                experiencia.getImgUrl()
         );
     }
 }

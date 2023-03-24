@@ -1,10 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.fede.portfolio.controller;
-
-
 
 import com.fede.portfolio.dto.EducacionDto;
 import com.fede.portfolio.dto.response.MessageResponse;
@@ -48,7 +42,7 @@ public class CEducacion {
         return new ResponseEntity<>(educacionMapper.mapToDto(educacion), HttpStatus.OK);
     }
     
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id){
         if(!sEducacion.existsById(id)){
@@ -58,7 +52,7 @@ public class CEducacion {
         return new ResponseEntity<>(new MessageResponse("Educacion eliminada"), HttpStatus.OK);
     }
     
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody EducacionDto dtoeduc){
         if((dtoeduc.getNombreE()).isEmpty()){
@@ -73,7 +67,7 @@ public class CEducacion {
           
     }
     
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping
     public ResponseEntity<?> update(
             @RequestBody EducacionDto dtoeduc
@@ -96,6 +90,7 @@ public class CEducacion {
         educacion.setDescripcionE(dtoeduc.getDescripcionE());
         educacion.setDesdeE(dtoeduc.getDesdeE());
         educacion.setHastaE(dtoeduc.getHastaE());
+        educacion.setImgUrl(dtoeduc.getImgUrl());
 
         sEducacion.update(educacion);
         

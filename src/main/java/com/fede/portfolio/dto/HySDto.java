@@ -18,6 +18,8 @@ public class HySDto {
     private int porcentaje;
     @NotBlank
     private String subtitle;
+    @Nullable
+    private String imgUrl;
 
     public HySDto() {
     }

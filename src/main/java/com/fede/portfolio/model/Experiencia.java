@@ -19,23 +19,26 @@ public class Experiencia {
     private String descripcionE;
     private String desdeE;
     private String hastaE;
+    private String imgUrl = "";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Experiencia(String nombreE, String descripcionE, String desdeE, String hastaE) {
+    public Experiencia(String nombreE, String descripcionE, String desdeE, String hastaE, String imgUrl, User user) {
         this.nombreE = nombreE;
         this.descripcionE = descripcionE;
         this.desdeE = desdeE;
         this.hastaE = hastaE;
+        this.imgUrl = imgUrl;
+        this.user = user;
     }
 
-    public Experiencia(String nombreE, String descripcionE, String desdeE, String hastaE, User user) {
+    public Experiencia(String nombreE, String descripcionE, String desdeE, String hastaE, String imgUrl) {
         this.nombreE = nombreE;
         this.descripcionE = descripcionE;
         this.desdeE = desdeE;
         this.hastaE = hastaE;
-        this.user = user;
+        this.imgUrl = imgUrl;
     }
 }

@@ -15,13 +15,16 @@ public class InfoDto {
 
     @Nullable
     private Long id;
+
+    @NotBlank
+    private String username;
     @NotBlank
     private String nombre;
     @NotBlank
     private String apellido;
-    @NotBlank
+    @Nullable
     private String img;
-    @NotBlank
+    @Nullable
     private String descripcion;
 
 

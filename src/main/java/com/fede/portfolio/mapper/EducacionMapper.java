@@ -14,10 +14,12 @@ public class EducacionMapper {
 
     public EducacionDto mapToDto(Educacion educacion) {
         EducacionDto educacionDto = new EducacionDto();
+        educacionDto.setId(educacion.getId());
         educacionDto.setNombreE(educacion.getNombreE());
         educacionDto.setDescripcionE(educacion.getDescripcionE());
         educacionDto.setDesdeE(educacion.getDesdeE());
         educacionDto.setHastaE(educacion.getHastaE());
+        educacionDto.setImgUrl(educacion.getImgUrl());
         return educacionDto;
     }
 }

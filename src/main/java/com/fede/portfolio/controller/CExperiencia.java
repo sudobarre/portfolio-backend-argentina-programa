@@ -40,7 +40,7 @@ public class CExperiencia {
         return new ResponseEntity<>(experienciaMapper.mapToDto(sExperiencia.getOne(id)), HttpStatus.OK);
     }
     
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         if (!sExperiencia.existsById(id)) {
@@ -50,7 +50,7 @@ public class CExperiencia {
         return new ResponseEntity<>(new MessageResponse("Experiencia eliminada"), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody ExperienciaDto dtoexp){
         if((dtoexp.getNombreE()).isEmpty()){
@@ -65,7 +65,7 @@ public class CExperiencia {
         return new ResponseEntity<>(new MessageResponse("Experiencia agregada"), HttpStatus.OK);
     }
     
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping
     public ResponseEntity<?> update(
             @RequestBody ExperienciaDto dtoexp
@@ -87,6 +87,7 @@ public class CExperiencia {
         experiencia.setDescripcionE(dtoexp.getDescripcionE());
         experiencia.setDesdeE(dtoexp.getDesdeE());
         experiencia.setHastaE(dtoexp.getHastaE());
+        experiencia.setImgUrl(dtoexp.getImgUrl());
 
         sExperiencia.update(experiencia);
         return new ResponseEntity<>(new MessageResponse("Experiencia actualizada"), HttpStatus.OK);

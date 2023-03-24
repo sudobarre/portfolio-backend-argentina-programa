@@ -47,7 +47,14 @@ public class SExperiencia {
      
      public void save(ExperienciaDto dtoexp){
          User user = authService.getCurrentUser();
-         Experiencia experiencia = new Experiencia(dtoexp.getNombreE(), dtoexp.getDescripcionE(), dtoexp.getDesdeE(), dtoexp.getHastaE(), user);
+         Experiencia experiencia = new Experiencia(
+                 dtoexp.getNombreE(),
+                 dtoexp.getDescripcionE(),
+                 dtoexp.getDesdeE(),
+                 dtoexp.getHastaE(),
+                 dtoexp.getImgUrl(),
+                 user
+         );
          rExperiencia.save(experiencia);
      }
      

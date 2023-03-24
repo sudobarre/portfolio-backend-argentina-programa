@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.fede.portfolio.service;
 
 
@@ -34,15 +31,18 @@ public class SEducacion {
         return rEducacion.findByUserAndId(user, id)
                 .orElseThrow(() -> new IllegalArgumentException("No such education with id:" + id + "found."));
     }
-    
-    public Educacion getByNombreE(String nombreE){
-        return rEducacion.findByNombreE(nombreE)
-                .orElseThrow(() -> new IllegalArgumentException("No such education with name:" + nombreE + "found."));
-    }
+
     
     public void save(EducacionDto dtoeduc){
         User user = authService.getCurrentUser();
-        Educacion educacion = new Educacion(dtoeduc.getNombreE(), dtoeduc.getDescripcionE(),dtoeduc.getDesdeE(),dtoeduc.getHastaE(), user);
+        Educacion educacion = new Educacion(
+                dtoeduc.getNombreE(),
+                dtoeduc.getDescripcionE(),
+                dtoeduc.getDesdeE(),
+                dtoeduc.getHastaE(),
+                dtoeduc.getImgUrl(),
+                user
+        );
         rEducacion.save(educacion);
     }
     

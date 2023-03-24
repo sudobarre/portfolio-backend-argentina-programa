@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Info {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,19 +17,15 @@ public class Info {
     
     @NotNull
     private String nombre;
-    
+
     @NotNull
     private String apellido;
-    
     @NotNull
     private String img;
-    
     @NotNull
     private String descripcion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-
 }

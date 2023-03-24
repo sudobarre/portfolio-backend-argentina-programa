@@ -7,10 +7,7 @@ import com.fede.portfolio.dto.response.UserInfoResponse;
 import com.fede.portfolio.exceptions.BlogException;
 import com.fede.portfolio.exceptions.TokenRefreshException;
 import com.fede.portfolio.model.*;
-import com.fede.portfolio.repository.RefreshTokenRepository;
-import com.fede.portfolio.repository.RoleRepository;
-import com.fede.portfolio.repository.UserRepository;
-import com.fede.portfolio.repository.VerificationTokenRepository;
+import com.fede.portfolio.repository.*;
 import com.fede.portfolio.security.jwt.JwtUtils;
 import com.fede.portfolio.security.services.RefreshTokenService;
 import com.fede.portfolio.security.services.UserDetailsImpl;
@@ -18,6 +15,7 @@ import com.fede.portfolio.security.services.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +55,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final RoleRepository roleRepository;
     private final UserDetailsServiceImpl userDetailsService;
+    private final RInfo ipersonaRepository;
 
     static final String accountVerificationUri = "/api/v1/auth/accountVerification/";
 
@@ -114,10 +113,13 @@ public class AuthService {
         String domainUrl = getDomain(request);
         String token = generateVerificationToken(user);
         mailService.sendMail(new NotificationEmail("Activate your Account.",
-                user.getEmail(), "You received this email because you signed up to sudobarre's blog." +
-                " If this wasn't you, ignore this mail. Please click on the link below to activate your account: "
+                user.getEmail(), "You received this email because you signed up to sudobarre's portfolio." +
+                " If this wasn't you, ignore this mail. Please click on the following link to activate your account: "
                 + domainUrl
                 + accountVerificationUri + token));
+
+
+
         return new ResponseEntity<>("User Registration Successful. Please check your email inbox to verify your account.",
                 OK);
     }
@@ -157,9 +159,20 @@ public class AuthService {
 
     private void fetchUserAndEnable(VerificationToken verificationToken) {
         String username = verificationToken.getUser().getUsername();
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new BlogException("User not found with name - " + username));
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new BlogException("User not found with name - " + username));
         user.setEnabled(true);
-        userRepository.save(user);
+
+        //create new info with just the username
+        Info info = new Info();
+        info.setUser(user);
+        info.setNombre(user.getUsername());
+        info.setImg("");
+        info.setDescripcion("");
+        info.setApellido("");
+        log.info("info: " + info);
+        ipersonaRepository.save(info);
+        log.info("Info saved for user: " + user.getUsername());
     }
 
     private String generateVerificationToken(User user) {

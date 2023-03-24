@@ -22,13 +22,12 @@ public class ExperienciaDto {
     @NotBlank
     private String hastaE;
 
+    @Nullable
+    private String imgUrl;
+
     public ExperienciaDto() {
     }
 
-    public ExperienciaDto(String nombreE, String descripcionE, String desdeE, String hastaE) {
-        this.nombreE = nombreE;
-        this.descripcionE = descripcionE;
-        this.desdeE = desdeE;
-        this.hastaE = hastaE;
-    }
+
+
 }
