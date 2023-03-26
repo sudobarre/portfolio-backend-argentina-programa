@@ -24,7 +24,7 @@ COPY . .
 RUN ./mvnw clean package
 
 # Copy the jar file to the container
-COPY target/portfolio-0.0.1-SNAPSHOT.jar .
+#COPY target/portfolio-0.0.1-SNAPSHOT.jar .
 
 # Expose port 8080
 EXPOSE 8080
