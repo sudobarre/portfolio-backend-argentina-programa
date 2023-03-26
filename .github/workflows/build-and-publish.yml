@@ -58,7 +58,3 @@ jobs:
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             MAIL_USERNAME=${{ secrets.MAIL_USERNAME }}
             MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}
-
-      - name: Send GET request to Render service
-        run: |
-          http GET "${{ secrets.RENDER_WEBHOOK }}"
