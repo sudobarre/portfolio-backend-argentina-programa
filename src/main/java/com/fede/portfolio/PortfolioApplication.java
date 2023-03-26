@@ -11,7 +11,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.fede.portfolio.model.Role;
 import static com.fede.portfolio.model.ERole.*;
-import com.fede.portfolio.model.User;
 
 @SpringBootApplication
 @EnableAsync

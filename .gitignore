@@ -33,6 +33,7 @@ build/
 .vscode/
 
 ### My stuff ###
+native-build.sh
 docker-build.sh
 publish.sh
 src/main/resources/application-dev.properties
