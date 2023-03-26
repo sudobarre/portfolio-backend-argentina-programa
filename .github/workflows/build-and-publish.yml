@@ -31,7 +31,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: login to docker
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u sudobarre --password-stdin
+        run: echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u sudobarre --password-stdin
 
 
       - name: Build native image
