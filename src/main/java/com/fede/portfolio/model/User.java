@@ -49,7 +49,7 @@ public class User {
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private List<Role> roles = new ArrayList<>();
 
 //TODO: not implemented feature yet
     @JoinTable(name = "USER_FRIENDS", joinColumns = {
