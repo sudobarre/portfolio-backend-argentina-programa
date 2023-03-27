@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Table(name = "users")
@@ -45,18 +44,11 @@ public class User {
 
     private String imgUrl;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(	name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
-
-//TODO: not implemented feature yet
-    @JoinTable(name = "USER_FRIENDS", joinColumns = {
-            @JoinColumn(name = "ADDING_USER", referencedColumnName = "userId", nullable =   false)}, inverseJoinColumns = {
-            @JoinColumn(name = "ADDED_USER", referencedColumnName = "userId", nullable = false)})
-    @ManyToMany(fetch=LAZY)
-    private Collection<User> friends;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Educacion> educacionList = new ArrayList<>();

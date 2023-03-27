@@ -3186,6 +3186,10 @@
   "queryAllPublicMethods":true
 },
 {
+  "name":"org.hibernate.tool.schema.internal.script.SingleLineSqlScriptExtractor",
+  "queryAllPublicMethods":true
+},
+{
   "name":"org.hibernate.type.SqlTypes",
   "allPublicFields":true
 },
