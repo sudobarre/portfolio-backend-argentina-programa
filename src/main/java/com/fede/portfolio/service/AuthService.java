@@ -15,7 +15,6 @@ import com.fede.portfolio.security.services.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -78,7 +77,7 @@ public class AuthService {
         user.setCreatedAt(LocalDateTime.now());
         user.setEnabled(false);
 
-        Set<String> strRoles = signupRequest.getRole();
+        List<String> strRoles = signupRequest.getRole();
         List<Role> roles = new ArrayList<>();
 
 

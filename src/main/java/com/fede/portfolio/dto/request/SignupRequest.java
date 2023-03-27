@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,7 +22,7 @@ public class SignupRequest {
     @Email
     private String email;
 
-    private Set<String> role;
+    private List<String> role;
 
     @NotBlank
     @Size(min = 4, max = 40)
