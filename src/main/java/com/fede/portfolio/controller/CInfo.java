@@ -68,10 +68,10 @@ public class CInfo {
         Info info = sInfo.getByUsername(infoDto.getUsername());
         
         info.setNombre(infoDto.getNombre());
+        info.setApellido(infoDto.getApellido());
         info.setDescripcion(infoDto.getDescripcion());
         info.setImg(infoDto.getImg());
-        
-        
+
         sInfo.update(info);
         return new ResponseEntity<>(new MessageResponse("Persona actualizada"), HttpStatus.OK);
     } 

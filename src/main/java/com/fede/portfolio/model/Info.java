@@ -18,7 +18,6 @@ public class Info {
     @NotNull
     private String nombre;
 
-    @NotNull
     private String apellido;
     @NotNull
     private String img;
