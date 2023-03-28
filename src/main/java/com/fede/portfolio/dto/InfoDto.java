@@ -20,12 +20,11 @@ public class InfoDto {
     private String username;
     @NotBlank
     private String nombre;
-    @NotBlank
+    @Nullable
     private String apellido;
     @Nullable
     private String img;
     @Nullable
     private String descripcion;
-
 
 }
